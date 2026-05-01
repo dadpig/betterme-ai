@@ -1,0 +1,2 @@
+- [User profile and study goals](user_profile.md) — tairone@gmail.com, Java/Scala/Rust polyglot studying AI via daily POCs; routine started 2026-05-01
+- [Daily study routine structure and 7-day arc](project_routine.md) — Day 1 plan (linear regression in Rust) proposed 2026-05-01; full 7-day arc through perceptron + backprop
