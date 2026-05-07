@@ -1,3 +1,3 @@
 - [User profile and study goals](user_profile.md) — tairone@gmail.com, Java/Scala/Rust polyglot studying AI via daily POCs; routine started 2026-05-01
 - [Daily study routine structure and 7-day arc](project_routine.md) — Day 1 plan (linear regression in Rust) proposed 2026-05-01; full 7-day arc through perceptron + backprop
-- [Daily progress log](project_progress_log.md) — Per-day record of proposed/completed POCs; latest entry: Day 5 (2026-05-05) Java linear regression, status: proposed
+- [Daily progress log](project_progress_log.md) — Per-day record of proposed/completed POCs; latest entry: Day 6 (2026-05-06) Java Strategy pattern, status: proposed

@@ -33,3 +33,19 @@ Append one entry per session. Most recent at the bottom. Update the **Status** f
 **Why:** User explicitly chose Java for today, overriding the original arc. The challenge keeps the linear-regression target (consistent with the 7-day theme) so a later cross-language retrospective remains possible.
 
 **How to apply:** When the user reports completion, capture: time spent, which stretch goals (if any) were attempted, recovered parameter values, and any pain points with Java's type system or build setup. Use those to calibrate Day 6.
+
+## 2026-05-06 — Day 6 (Java track day 2)
+
+- **Topic:** GoF **Strategy** pattern — checkout discount engine
+- **Language:** Java (21+, records, `@FunctionalInterface`, lambdas)
+- **Folder:** `/Users/tairone/personal-pocs/betterme-ai/day-06-strategy-discount-java/`
+- **Difficulty target:** easy — design-pattern entry tier; ~30–45 min budget
+- **Why this topic:** User framed today as "Java day 2" and asked for an easy challenge that doesn't repeat Java day 1 (Roman numerals, algorithm fundamentals). Rotated axis from algorithms → design patterns. Strategy was chosen as the gentlest GoF on-ramp because it maps 1:1 onto Java interfaces and lambdas, and it forces the user to confront Open/Closed without heavy ceremony.
+- **Acceptance:** four named strategies (`NoDiscount`, `PercentageOff`, `FixedAmountOff`, `BuyNGetOneFree`); `Checkout` clamps final price at zero; constructor-validated inputs; zero edits to `Checkout` when adding a new strategy; demo `Main` prints PASS for all six scenarios (including a lambda `5%`).
+- **Stretch:** (A) lambda registry (`Map<String, DiscountStrategy>`); (B) `CompositeDiscount` summing children; (C) `sealed interface DiscountStrategy permits ...` and contrast with the open functional version.
+- **Status:** proposed
+- **Scaffold state:** Compiles cleanly. All `discountCents` and `finalPriceCents` bodies are `UnsupportedOperationException("TODO ...")` placeholders so `Main` runs and reports `TODO` for each scenario. `Cart.subtotalCents()` is also a TODO (deliberate — it's the warm-up step).
+
+**Why this calibration:** Day 1 Java (Roman numerals) was algorithm-fundamentals; the user has shipped Day 5 linear regression in Java already, so they are not a Java beginner. Easy-tier here means low *conceptual* load (Strategy is the simplest GoF), not low *idiomatic* density — records, sealed types, and `@FunctionalInterface` all show up.
+
+**How to apply on completion:** capture which stretch (if any) was attempted, whether the user reached for the lambda form spontaneously, and whether they noticed the Open/Closed payoff in `Checkout`. If they breezed through it, bump Day 7 to a harder pattern (Visitor on a sealed ADT, or Decorator with composition chains). If they got stuck on records / sealed syntax, stay in patterns but ease the Java idiom load.
