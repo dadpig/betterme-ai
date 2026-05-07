@@ -18,6 +18,7 @@ public final class Main {
 
         // Round-trip property: fromRoman(toRoman(n)) == n  for all n in 1..3999.
         for (int n = 1; n <= 3999; n++) {
+            System.out.println(n);
             String roman = RomanNumerals.toRoman(n);
             int back = RomanNumerals.fromRoman(roman);
             if (back != n) {

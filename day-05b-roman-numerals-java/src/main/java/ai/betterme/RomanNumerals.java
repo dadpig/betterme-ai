@@ -3,6 +3,9 @@ package ai.betterme;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.Map.entry;
 
 /**
  * Roman numeral conversion utilities.
@@ -12,9 +15,23 @@ import java.util.Map;
  */
 public final class RomanNumerals {
 
-    private static final Map<Integer, String>  numerals = Map.of(1000, "M", 900, "CM",
-            500, "D",400, "CD",100, "C",90, "XC",50, "L",40, "XL",
-            40, "XL",9, "IX",5, "V",4, "IV",1, "I");
+    private static final Map<Integer, String>  numerals =  Map.ofEntries(
+            entry(1000, "M"),
+            entry(900, "CM"),
+            entry(500, "D"),
+            entry(400, "CD"),
+            entry(100, "C"),
+            entry(90, "XC"),
+            entry(50, "L"),
+            entry(40, "XL"),
+            entry(10, "X"),
+            entry(9, "IX"),
+            entry(5, "V"),
+            entry(4, "IV"),
+            entry(1, "I")
+    );
+
+
     private RomanNumerals() {
         // utility class
 
@@ -33,7 +50,7 @@ public final class RomanNumerals {
         //       Hint: include the subtractive pairs (900="CM", 400="CD", 90="XC", ...)
         //       directly in the table — that removes all special-casing.
 
-        if (n >3999)
+        if (n<1 || n >3999)
             throw new UnsupportedOperationException("TODO: implement toRoman");
 
         StringBuilder roman = new StringBuilder();
@@ -102,11 +119,33 @@ public final class RomanNumerals {
         // TODO: validate the result is in 1..3999 and that toRoman(result).equals(s.toUpperCase())
         //       — that round-trip check is the cheapest way to reject malformed input
         //       like "IIII" or "VV".
-        throw new UnsupportedOperationException("TODO: implement fromRoman");
+
+        int val = 0;
+        if (null == s || s.isEmpty()) {
+
+            throw new UnsupportedOperationException("TODO: implement fromRoman");
+        }else{
+            Map<String, Integer> reversed = numerals.entrySet().stream()
+                    .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+            while (!s.isEmpty()){
+                if(s.length()>1){
+                    String k = s.substring(0,2);
+                    if(reversed.get(k) != null){
+                        val += reversed.get(k);
+                        s = s.substring(2);
+                    }else {
+                        val += reversed.get(s.substring(0, 1));
+                        s = s.substring(1);
+                    }
+                } else {
+                    val += reversed.get(s.substring(0, 1));
+                    s = s.substring(1);
+                }
+            }
+        }
+        return val;
     }
 
-    static void main() {
-        System.out.println(toRoman(1));
-        System.out.println(toRoman(3999));
-    }
+
+
 }
