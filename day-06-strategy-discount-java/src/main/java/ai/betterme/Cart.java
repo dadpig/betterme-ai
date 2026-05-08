@@ -22,6 +22,8 @@ public record Cart(List<LineItem> items) {
     public long subtotalCents() {
         // TODO: implement using a stream or a simple loop.
         //       Hint: items.stream().mapToLong(li -> li.unitPriceCents() * li.quantity()).sum();
-        throw new UnsupportedOperationException("TODO: implement subtotalCents");
+        return items.stream().mapToLong(li-> li.unitPriceCents() * li.quantity()).sum();
+
+        //throw new UnsupportedOperationException("TODO: implement subtotalCents");
     }
 }
