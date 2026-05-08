@@ -17,8 +17,9 @@ public final class Discounts {
     public static final class NoDiscount implements DiscountStrategy {
         @Override
         public long discountCents(Cart cart) {
+            return 0;
             // TODO: trivially return 0.
-            throw new UnsupportedOperationException("TODO");
+            //throw new UnsupportedOperationException("TODO");
         }
     }
 
@@ -30,13 +31,16 @@ public final class Discounts {
 
         public PercentageOff(int percent) {
             // TODO: validate percent in [0, 100].
-            this.percent = percent;
+            if(percent > 0 && percent <= 100) {
+                this.percent = percent;
+            }else  throw new UnsupportedOperationException("Percent out of range  [0, 100].");
         }
 
         @Override
         public long discountCents(Cart cart) {
             // TODO: return subtotal * percent / 100. Mind integer arithmetic.
-            throw new UnsupportedOperationException("TODO");
+           return  (cart.subtotalCents() * this.percent)/100;
+           // throw new UnsupportedOperationException("TODO");
         }
     }
 
@@ -49,13 +53,16 @@ public final class Discounts {
 
         public FixedAmountOff(long amountCents) {
             // TODO: validate amountCents >= 0.
-            this.amountCents = amountCents;
+            if(amountCents>0) {
+                this.amountCents = amountCents;
+            }else throw new UnsupportedOperationException("amountCents is negative.");
         }
 
         @Override
         public long discountCents(Cart cart) {
             // TODO: return amountCents (Checkout will cap at subtotal).
-            throw new UnsupportedOperationException("TODO");
+            return cart.subtotalCents() - this.amountCents;
+            //throw new UnsupportedOperationException("TODO");
         }
     }
 
@@ -70,6 +77,9 @@ public final class Discounts {
 
         public BuyNGetOneFree(String itemName, int n) {
             // TODO: validate itemName not blank, n >= 1.
+            if(itemName.isEmpty() || n <=1){
+                throw new UnsupportedOperationException("item name is empty or quantity is one.");
+            }
             this.itemName = itemName;
             this.n = n;
         }
@@ -78,7 +88,15 @@ public final class Discounts {
         public long discountCents(Cart cart) {
             // TODO: walk cart.items(), match by name, compute free units, sum.
             //       Hint: stream + filter + mapToLong + sum reads cleanly here.
-            throw new UnsupportedOperationException("TODO");
+            long discount = 0;
+            for(LineItem item : cart.items()){
+                if(item.name().equals(this.itemName)){
+                   discount = item.unitPriceCents();
+                   break;
+                }
+            }
+            return cart.subtotalCents() - discount;
+            //throw new UnsupportedOperationException("TODO");
         }
     }
 }
