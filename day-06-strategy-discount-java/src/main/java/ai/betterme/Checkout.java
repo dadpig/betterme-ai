@@ -34,6 +34,10 @@ public final class Checkout {
         //  3. Reject negative discounts (defensive — the contract forbids them).
         //  4. Cap the discount at the subtotal (Math.min).
         //  5. Return subtotal - cappedDiscount.
-        throw new UnsupportedOperationException("TODO: implement finalPriceCents");
+
+            return cart.subtotalCents() - strategy.discountCents(cart);
+        
+
+        //throw new UnsupportedOperationException("TODO: implement finalPriceCents");
     }
 }
