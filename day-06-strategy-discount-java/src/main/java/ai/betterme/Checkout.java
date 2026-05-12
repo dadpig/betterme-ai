@@ -36,7 +36,7 @@ public final class Checkout {
         //  5. Return subtotal - cappedDiscount.
 
             return cart.subtotalCents() - strategy.discountCents(cart);
-        
+
 
         //throw new UnsupportedOperationException("TODO: implement finalPriceCents");
     }

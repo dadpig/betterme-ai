@@ -61,8 +61,11 @@ public final class Discounts {
         @Override
         public long discountCents(Cart cart) {
             // TODO: return amountCents (Checkout will cap at subtotal).
-            return cart.subtotalCents() - this.amountCents;
-            //throw new UnsupportedOperationException("TODO");
+
+            if(this.amountCents>=cart.subtotalCents()){
+                return cart.subtotalCents();
+            }
+            return (this.amountCents);
         }
     }
 
@@ -77,7 +80,7 @@ public final class Discounts {
 
         public BuyNGetOneFree(String itemName, int n) {
             // TODO: validate itemName not blank, n >= 1.
-            if(itemName.isEmpty() || n <=1){
+            if(itemName.isEmpty() || n <1){
                 throw new UnsupportedOperationException("item name is empty or quantity is one.");
             }
             this.itemName = itemName;
@@ -88,14 +91,9 @@ public final class Discounts {
         public long discountCents(Cart cart) {
             // TODO: walk cart.items(), match by name, compute free units, sum.
             //       Hint: stream + filter + mapToLong + sum reads cleanly here.
-            long discount = 0;
-            for(LineItem item : cart.items()){
-                if(item.name().equals(this.itemName)){
-                   discount = item.unitPriceCents();
-                   break;
-                }
-            }
-            return cart.subtotalCents() - discount;
+
+            return  cart.items().stream().filter(i->i.name().equals(this.itemName)).mapToLong(i->i.unitPriceCents()).sum();
+
             //throw new UnsupportedOperationException("TODO");
         }
     }
