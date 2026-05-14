@@ -66,3 +66,41 @@ Append one entry per session. Most recent at the bottom. Update the **Status** f
 **Why this calibration:** Beginner-tier conceptually (just `groupingBy` + `sorted` + `limit`) but introduces three things they have not yet done in this routine: (1) `Collectors.groupingBy`, (2) chained `Comparator` with tie-breaking, (3) JUnit 5. No new build tooling — JUnit standalone jar keeps the IntelliJ/CLI workflow they're already on.
 
 **How to apply on completion:** If they reach for a manual loop instead of `groupingBy`, surface the data-driven idiom directly. If `IllegalArgumentException` lands without prompting, great signal. If tests come out as one giant method instead of several `@Test` methods, coach toward one-assertion-per-test. Bump Day 8 either to **Decorator pattern** (next GoF, builds on Strategy) or to **a graph traversal kata** (rotate to algorithms harder tier) depending on which stretch they chose.
+
+**Day 7 observed outcome (post-scaffold review):**
+- `topN` shipped as a single stream pipeline using `groupingBy(identity(), counting())` + chained `Comparator.comparingLong(...).reversed().thenComparing(...)`. The data-driven idiom landed cleanly.
+- `IllegalArgumentException` was used correctly for `n < 0`. The Day 5b/6 UOE-for-validation habit is broken.
+- JUnit 5 was **not** wired up — the user kept the hand-rolled `Main` PASS/FAIL harness. Stretch A (JUnit) carries over as the JUnit 5 on-ramp moves to Day 8 stretch.
+- Style nits remaining: stray `else` after a throwing `if` (early-return style is cleaner), inconsistent import indentation. Mention only if they come up — not blocking.
+
+## 2026-05-13 — Day 8 (Java track day 4)
+
+- **Topic:** GoF **Decorator** pattern — stackable discounts (composes on top of Day 6's Strategy domain)
+- **Language:** Java (21+, records, `@FunctionalInterface`, `UnaryOperator`, default methods)
+- **Folder:** `/Users/tairone/personal-pocs/betterme-ai/day-08-decorator-discount-java/`
+- **Difficulty target:** intermediate — design-pattern second-tier; ~60–90 min budget for core
+- **Why this topic:**
+  - Rotation: returns to design patterns after Day 7's algorithms/streams. Decorator is the natural next GoF after Strategy.
+  - Builds on familiar domain (Cart + DiscountStrategy from Day 6) so the *new* concept (recursive wrapping) lands without domain noise.
+  - Forces the user to confront the two latent bugs in Day 6's `Checkout` that the log flagged but Day 6 never closed: missing negative-discount guard and missing `Math.min(discount, subtotal)` cap. Open/Closed payoff becomes concrete.
+  - Reinforces the Day 7 win: `IllegalArgumentException` for validation, `IllegalStateException` only for "the strategy itself misbehaved" (legitimate ISE territory).
+  - Introduces `default` interface methods and `UnaryOperator<T>` as a decorator-factory idiom — same shape as `Function.andThen` / `Comparator.thenComparing`, which is high-leverage Java vocabulary.
+- **Acceptance:**
+  - `DiscountDecorator` (abstract) holds a `protected final DiscountStrategy wrapped`, rejects null in constructor.
+  - Four concrete decorators: `PercentageOffDecorator`, `FixedAmountOffDecorator`, `CapDecorator`, `MinSubtotalDecorator`. Each `discountCents` is a single expression delegating to `wrapped`.
+  - `NoDiscount` (Null Object) is the base of every stack.
+  - `Discounts` factory exposes `none()`, `percentageOff(int)`, `fixedAmountOff(long)`, `capAt(long)`, `minSubtotal(long)`. The last four return `UnaryOperator<DiscountStrategy>`.
+  - `DiscountStrategy.then(UnaryOperator<DiscountStrategy>)` is a default method that rejects null and returns `decorator.apply(this)`.
+  - `Checkout.finalPriceCents` is hardened: rejects negative discounts with `IllegalStateException`, caps at subtotal, returns non-negative.
+  - All input validation throws `IllegalArgumentException` with a message. Zero is a valid no-op for `percentageOff(0)` / `fixedAmountOff(0)`.
+  - `Main` runs nine scenarios (seven from README + two Open/Closed self-checks: lambda returning > subtotal, lambda returning negative).
+- **Stretch:** (A) JUnit 5 via `junit-platform-console-standalone` jar — the on-ramp that didn't happen on Day 7; (B) port Day 6's `BuyNGetOneFree` as a decorator; (C) sealed permits across `DiscountStrategy` and `DiscountDecorator` for compile-time exhaustiveness on `switch`.
+- **Status:** proposed
+
+**Why this calibration:** Decorator is conceptually harder than Strategy (recursive wrapping + order-sensitivity) but lives in a domain the user already understands. The `UnaryOperator<DiscountStrategy>` factory shape is the only genuinely new abstraction; the rest is muscle-memory consolidation (records, immutability, validation, single-expression methods). Time budget is 60–90 min because there are eight files vs. Day 6's six, and `Main` has nine scenarios.
+
+**How to apply on completion:**
+- If `Checkout` doesn't get hardened (they leave the Day 6 buggy version), surface the Open/Closed point directly — the two self-check scenarios at the bottom of `Main` are designed to fail loudly without the hardening.
+- If `CapDecorator` accidentally *adds* `maxCents` instead of replacing with `min(wrapped, maxCents)`, that is the classic Decorator misread — "add to wrapped" is the *default* shape, not the *only* shape. Worth flagging.
+- If they pick stretch A (JUnit 5), this is the moment to scaffold a `src/test/java` folder and `junit-platform-console-standalone-1.10.x.jar` placement convention for future days.
+- Day 9 candidates: (i) rotate to algorithms — graph traversal (BFS/DFS on adjacency lists), good intermediate kata; or (ii) **Observer** pattern (next GoF after Decorator that doesn't require concurrency); or (iii) language rotation — port one of Days 5–8 to Scala or Rust to start the cross-language contrast arc the original 7-day plan promised. Pick based on the user's energy and which stretch they tackled.

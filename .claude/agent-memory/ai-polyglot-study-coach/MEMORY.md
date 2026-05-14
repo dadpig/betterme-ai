@@ -1,4 +1,4 @@
 - [User profile and study goals](user_profile.md) — tairone@gmail.com, Java/Scala/Rust polyglot studying AI via daily POCs; routine started 2026-05-01
 - [User Java skill level and idiomatic gaps](user_java_skill.md) — Advanced-beginner Java; recurring gaps: wrong exception type for validation, control-flow over data, no JUnit yet
 - [Daily study routine structure and 7-day arc](project_routine.md) — Day 1 plan (linear regression in Rust) proposed 2026-05-01; full 7-day arc through perceptron + backprop
-- [Daily progress log](project_progress_log.md) — Per-day record of proposed/completed POCs; latest entry: Day 7 (2026-05-12) Java word-frequency CLI, status: proposed
+- [Daily progress log](project_progress_log.md) — Per-day record of proposed/completed POCs; latest entry: Day 8 (2026-05-13) Java Decorator/stackable-discounts, status: proposed
