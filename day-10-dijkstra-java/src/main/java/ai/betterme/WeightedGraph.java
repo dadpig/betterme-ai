@@ -1,7 +1,6 @@
 package ai.betterme;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -65,8 +64,37 @@ public record WeightedGraph(Map<String, List<Edge>> adjacency) {
      * <p>Target complexity: {@code O((V + E) log V)}.
      */
     public long shortestDistance(String from, String to) {
-       //TODO implement
-        throw new UnsupportedOperationException("shortestDistance not implemented yet");
+
+        if (!adjacency.containsKey(from) || !adjacency.containsKey(to)) {
+            throw new IllegalArgumentException("invalid node: from="+from +" or to=" + to + " !");
+        }
+
+        if (from.equals(to)) {
+            return 0;
+        }
+
+        Map<String, Long> dist = new HashMap<>(Map.of(from, 0L));
+        PriorityQueue<Entry> heap = new PriorityQueue<>(Comparator.comparingLong(Entry::dist));
+        heap.add(new Entry(from, 0L));
+
+        while (!heap.isEmpty()) {
+            Entry current = heap.poll();
+
+            if (current.dist() > dist.getOrDefault(current.node(), Long.MAX_VALUE)) {
+                continue;
+            }
+            if (current.node().equals(to)) {
+                return current.dist();
+            }
+            for (Edge edge : adjacency.get(current.node())) {
+                long candidate = current.dist() + edge.weight();
+                if (candidate < dist.getOrDefault(edge.to(), Long.MAX_VALUE)) {
+                    dist.put(edge.to(), candidate);
+                    heap.add(new Entry(edge.to(), candidate));
+                }
+            }
+        }
+        return -1;
     }
 
     /**
@@ -87,17 +115,56 @@ public record WeightedGraph(Map<String, List<Edge>> adjacency) {
      * from {@code to} to {@code from} and reverse the result.
      */
     public List<String> shortestPath(String from, String to) {
-        //TODO implement
-        throw new UnsupportedOperationException("shortestPath not implemented yet");
+
+        if (!adjacency.containsKey(from) || !adjacency.containsKey(to)) {
+            throw new IllegalArgumentException("invalid node: from="+from +" or to=" + to + " !");
+        }
+
+        if (from.equals(to)) {
+            return List.of(from);
+        }
+
+        Map<String, Long> dist = new HashMap<>();
+        Map<String, String> previous = new HashMap<>();
+        dist.put(from, 0L);
+
+        PriorityQueue<Entry> heap =
+                new PriorityQueue<>(Comparator.comparingLong(Entry::dist));
+        heap.add(new Entry(from, 0L));
+
+        boolean reached = false;
+        while (!heap.isEmpty()) {
+            Entry current = heap.poll();
+            if (current.dist() > dist.getOrDefault(current.node(), Long.MAX_VALUE)) {
+                continue;
+            }
+            if (current.node().equals(to)) {
+                reached = true;
+                break;
+            }
+            for (Edge edge : adjacency.get(current.node())) {
+                long candidate = current.dist() + edge.weight();
+                if (candidate < dist.getOrDefault(edge.to(), Long.MAX_VALUE)) {
+                    dist.put(edge.to(), candidate);
+                    previous.put(edge.to(), current.node());
+                    heap.add(new Entry(edge.to(), candidate));
+                }
+            }
+        }
+        if (!reached) {
+            return List.of();
+        }
+
+        List<String> path = new ArrayList<>();
+        for (String node = to; node != null; node = previous.get(node)) {
+            path.add(node);
+        }
+        Collections.reverse(path);
+        return Collections.unmodifiableList(path);
     }
 
-    /**
-     * Helper — given to you. Throws if {@code node} is not in this graph.
-     * Use this for input validation in both methods above.
-     */
-    private void requireNode(String node) {
-        if (!adjacency.containsKey(node)) {
-            throw new IllegalArgumentException("unknown node: " + node);
-        }
-    }
+    /** Min-heap entry pairing a node with its tentative distance from the source. */
+    private record Entry(String node, long dist) { }
+
+
 }
