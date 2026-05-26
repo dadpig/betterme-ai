@@ -101,10 +101,28 @@ public final class Palindrome {
      *         palindrome.
      * @throws IllegalArgumentException if {@code s} is {@code null}.
      */
-    public static boolean isPalindrome(String s) {
+    public static boolean isPalindrome(String input) {
+        if(null == input){
+            throw new IllegalArgumentException("inout could not be null.");
+        }
+        int left = 0;
+        int right = input.length()-1;
 
-        throw new UnsupportedOperationException(
-                "TODO: implement two-pointer palindrome check");
+        while(left < right){
+            if(!Character.isLetterOrDigit(input.charAt(left))){
+                left++;
+                continue;
+            }
+            if(!String.valueOf(input.charAt(left)).toLowerCase()
+                    .equals(String.valueOf(input.charAt(right)).toLowerCase())){
+                return false;
+            }
+            left++;
+            right--;
+
+        }
+      
+        return true;
     }
 
     // ------------------------------------------------------------------------
