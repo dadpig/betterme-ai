@@ -121,7 +121,34 @@ public final class Palindrome {
             right--;
 
         }
-      
+        // STEP 2 - initialize two indices: left = 0, right = s.length() - 1.
+        //          A length-0 or length-1 string is trivially a palindrome -
+        //          either you'll skip the loop entirely (length 0) or do
+        //          zero iterations (length 1: left == right, loop condition
+        //          left < right is false on entry).
+        //
+        // STEP 3 - while (left < right):
+        //            (3a) advance `left` past any non-alphanumeric character.
+        //                 Predicate: !Character.isLetterOrDigit(s.charAt(left)).
+        //                 Stop if left >= right (you've consumed everything).
+        //            (3b) retreat `right` past any non-alphanumeric character.
+        //                 Same predicate, mirrored.
+        //                 Stop if left >= right.
+        //            (3c) compare the lowercased characters at the two
+        //                 indices. If they differ, the input is not a
+        //                 palindrome - return false.
+        //            (3d) advance both: left++, right--. Without this step
+        //                 the loop never terminates.
+        //
+        // STEP 4 - if the loop exits cleanly, every alphanumeric pair
+        //          matched. Return true.
+        //
+        // EXAMPLES to trace by hand before writing code:
+        //   "A man, a plan, a canal: Panama"  ->  true
+        //   "race a car"                       ->  false (e != c)
+        //   ""                                 ->  true (loop skipped)
+        //   "  ,  "                            ->  true (all non-alnum, pointers cross)
+        //   "0P"                               ->  false ('0' != 'p')
         return true;
     }
 

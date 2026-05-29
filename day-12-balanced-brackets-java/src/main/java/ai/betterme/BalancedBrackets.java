@@ -104,6 +104,80 @@ public final class BalancedBrackets {
                 }
             }
         }
+
+        // ====================================================================
+        //  STEP-BY-STEP IMPLEMENTATION GUIDE
+        // ====================================================================
+        //
+        // STEP 2 — Create an empty stack of Character.
+        //   Use:  Deque<Character> stack = new ArrayDeque<>();
+        //   Use the Deque interface as the variable type and ArrayDeque as
+        //   the concrete impl. On a Deque, the "stack" operations are
+        //   `push(c)`, `pop()`, `peek()`, and `isEmpty()`.
+        //
+        // STEP 3 — Walk the string once, character by character.
+        //   For each char c in input:
+        //
+        //     CASE A — c is an OPENER ( '(', '[', '{' ).
+        //       Push it onto the stack. You don't yet know which closer will
+        //       match it; you just remember it's open.
+        //
+        //       HINT: rather than `if (c == '(' || c == '[' || c == '{')`,
+        //       check `CLOSER_TO_OPENER.containsValue(c)`. That keeps the
+        //       lookup table as the single source of truth — add a new
+        //       bracket pair to the map and this code Just Works.
+        //
+        //     CASE B — c is a CLOSER ( ')', ']', '}' ).
+        //       i.   If the stack is empty, there's no opener to match this
+        //            closer — return false immediately.
+        //       ii.  Otherwise, pop the top opener off the stack.
+        //       iii. Look up CLOSER_TO_OPENER.get(c) — the opener that
+        //            SHOULD be on top right now. If it doesn't equal the
+        //            opener you just popped, the brackets are mismatched
+        //            (e.g. "(]") — return false.
+        //
+        //       HINT: detect closers with `CLOSER_TO_OPENER.containsKey(c)`.
+        //
+        //     CASE C — c is anything else (letter, digit, space, ...).
+        //       Ignore it. Just move on to the next character.
+        //
+        // STEP 4 — After the loop, decide the final answer.
+        //   If the stack is empty, every opener found its closer in the
+        //   right order — return true. If the stack still has openers in
+        //   it (e.g. input was "("), they were never closed — return false.
+        //   In one line:  `return stack.isEmpty();`
+        //
+        // ====================================================================
+        //  EDGE CASES YOUR CODE MUST HANDLE (the tests check these)
+        // ====================================================================
+        //   - ""           -> true   (vacuously balanced)
+        //   - "()"         -> true
+        //   - "()[]{}"     -> true   (sequential, not nested)
+        //   - "([{}])"     -> true   (deeply nested)
+        //   - "(]"         -> false  (mismatched pair)
+        //   - "([)]"       -> false  (interleaved — this is THE classic
+        //                              reason you need a stack, not a counter)
+        //   - "("          -> false  (opener never closed)
+        //   - ")"          -> false  (closer with empty stack)
+        //   - "a(b)c"      -> true   (non-bracket chars ignored)
+        //   - null         -> throws IllegalArgumentException
+        //
+        // ====================================================================
+        //  COMMON BUGS TO AVOID
+        // ====================================================================
+        //   1. Using a COUNTER instead of a stack. `int depth = 0; depth++ on
+        //      opener, depth-- on closer, return depth == 0` looks right and
+        //      passes "()[]{}" — but says "([)]" is balanced. It isn't.
+        //   2. Forgetting the empty-stack check before pop(). ArrayDeque.pop()
+        //      on an empty deque throws NoSuchElementException. You must
+        //      return false BEFORE attempting the pop.
+        //   3. Returning true at the end without checking stack.isEmpty().
+        //      "(" would falsely report balanced because the loop ends
+        //      without any explicit failure.
+        //
+        // Delete the throw below once you start implementing.
+        //throw new UnsupportedOperationException("TODO: implement isBalanced — follow STEP 1..STEP 4 above");
+
         return stack.isEmpty();
     }
 

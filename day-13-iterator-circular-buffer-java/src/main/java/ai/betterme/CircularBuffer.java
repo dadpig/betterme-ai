@@ -114,7 +114,7 @@ public class CircularBuffer<T> implements Iterable<T> {
                 head++;
             }
         }
-        
+
     }
 
     /**
