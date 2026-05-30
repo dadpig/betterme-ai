@@ -66,29 +66,6 @@ public sealed interface Notification
                     .format("[PUSH to %s] %s - %s", recipient, title, message);
             default -> "Unexpected value: " + this;
         };
-        // STEP-BY-STEP IMPLEMENTATION
-        //
-        // 1. Write a `switch` EXPRESSION (not statement) on `this`. Assign the
-        //    result to `return` directly:  return switch (this) { ... };
-        //
-        // 2. Add exactly ONE arm per permitted subtype, using record-pattern
-        //    deconstruction so the components are bound as locals:
-        //       case EmailNotification(String r, String s, String m) -> ...
-        //       case SmsNotification(String r, String m)             -> ...
-        //       case PushNotification(String r, String t, String m)  -> ...
-        //
-        // 3. For each arm, return a String.format(...) (or string concatenation)
-        //    matching the exact formats from the Javadoc above:
-        //       EMAIL: "[EMAIL to {recipient}] {subject}: {message}"
-        //       SMS:   "[SMS to {recipient}] {message}"
-        //       PUSH:  "[PUSH to {recipient}] {title} - {message}"
-        //    The test suite asserts the exact strings - watch the punctuation:
-        //    EMAIL uses ": " between subject and message; PUSH uses " - ".
-        //
-        // 4. DO NOT add a `default` branch. The compiler must prove
-        //    exhaustiveness from the `permits` clause. If a fourth subtype is
-        //    added later, this method should fail to compile until it's
-        //    handled - that compile-time safety is the whole point of sealed.
 
     }
 }
