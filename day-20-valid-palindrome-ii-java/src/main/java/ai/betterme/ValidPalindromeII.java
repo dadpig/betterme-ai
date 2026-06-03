@@ -148,12 +148,36 @@ public final class ValidPalindromeII {
      * @return {@code true} if at most one deletion makes {@code s} a palindrome.
      * @throws IllegalArgumentException if {@code s} is {@code null}.
      */
-    public static boolean isAlmostPalindrome(String s) {
+    public static boolean isAlmostPalindrome(String input) {
+        
+        if (null == input) {
+            throw new IllegalArgumentException("s is null");
+        }
 
-        // Replace this stub with the real logic:
-        throw new UnsupportedOperationException("TODO: implement isAlmostPalindrome");
+        int left = 0'
+        int  right = s.length() - 1;
+
+        while (left < right) {
+            if(input.charAt(left) == input.charAt(right)) {
+                left++;
+                right--;
+            }else {
+                return isPalindrome(input, left+1, right)
+                        || isPalindrome(input, left, right-1);
+            }
+        }
+        return true;
     }
 
+    private static boolean isPalindrome(String input, int left, int right) {
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)){
+                return false;
+            }
+            left++; right--;
+        }
+        return true;
+    }
         // ------------------------------------------------------------------------
     //  Demo entry point - quick smoke check while you iterate.
     //  Real verification lives in src/test/.../ValidPalindromeIITest.java.

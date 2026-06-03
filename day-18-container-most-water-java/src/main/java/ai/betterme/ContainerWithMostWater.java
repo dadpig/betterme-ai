@@ -151,7 +151,47 @@ public final class ContainerWithMostWater {
      */
     public static long maxArea(int[] heights) {
 
-      
+        // ------------------------------------------------------------------
+        // STEP 1 - VALIDATE THE INPUT (fail fast with IllegalArgumentException).
+        //   - If heights is null OR heights.length < 2, throw
+        //     IllegalArgumentException. You need at least two walls.
+        //   - Scan the array once: if ANY heights[i] is negative, throw
+        //     IllegalArgumentException naming the offending index/value.
+        //     Note: 0 is a VALID height - only NEGATIVE is invalid.
+        //   Prefer early-return / early-throw style (no big nested else).
+        // ------------------------------------------------------------------
+
+        // ------------------------------------------------------------------
+        // STEP 2 - SET UP THE TWO POINTERS AND THE RUNNING MAX.
+        //   - int left  = 0;
+        //   - int right = heights.length - 1;
+        //   - long best = 0;   // long, so the area never overflows an int
+        // ------------------------------------------------------------------
+
+        // ------------------------------------------------------------------
+        // STEP 3 - WALK THE POINTERS TOWARD EACH OTHER.
+        //   while (left < right) {
+        //       a) height = Math.min(heights[left], heights[right])
+        //       b) width  = right - left
+        //       c) area   = (long) width * height   // cast BEFORE multiplying
+        //       d) best   = Math.max(best, area)
+        //       e) move the SHORTER wall inward:
+        //            if (heights[left] < heights[right]) left++;
+        //            else                                 right--;
+        //   }
+        //   The key insight: width only ever shrinks, so the only hope of a
+        //   bigger area is a taller wall - and the shorter wall is what caps
+        //   you, so that is the one to discard.
+        // ------------------------------------------------------------------
+
+        // ------------------------------------------------------------------
+        // STEP 4 - RETURN THE BEST AREA FOUND.
+        //   return best;
+        // ------------------------------------------------------------------
+
+        // Remove this stub once you implement the steps above.
+        // (UnsupportedOperationException here means "not implemented yet" -
+        //  contrast with IllegalArgumentException, which means "bad argument".)
         throw new UnsupportedOperationException("TODO: implement maxArea");
     }
 
