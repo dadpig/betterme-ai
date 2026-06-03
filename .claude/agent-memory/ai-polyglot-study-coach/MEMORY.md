@@ -1,4 +1,4 @@
 - [User profile and study goals](user_profile.md) — tairone@gmail.com, Java/Scala/Rust polyglot studying AI via daily POCs; routine started 2026-05-01
 - [User Java skill level and idiomatic gaps](user_java_skill.md) — Advanced-beginner Java; recurring gaps: wrong exception type for validation, control-flow over data, no JUnit yet
 - [Daily study routine structure and 7-day arc](project_routine.md) — Day 1 plan (linear regression in Rust) proposed 2026-05-01; full 7-day arc through perceptron + backprop
-- [Daily progress log](project_progress_log.md) — Per-day record of proposed/completed POCs; latest entry: Day 15 (2026-05-25) Java Valid Palindrome (two-pointer), easy, status: proposed — continues JUnit 5 shim on-ramp
+- [Daily progress log](project_progress_log.md) — Per-day record of proposed/completed POCs; latest entry: Day 20 (2026-06-02) Java Valid Palindrome II / LeetCode 680 (two-pointer + skip-and-recheck), intermediate, proposed — SPACED-REVISIT of Day 15; 25 tests incl. concurrency + 2 property-based oracles; user asked for Java so Scala rotation deferred again (14 deep)
