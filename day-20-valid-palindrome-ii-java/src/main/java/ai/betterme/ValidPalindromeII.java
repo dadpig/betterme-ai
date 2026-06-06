@@ -149,12 +149,12 @@ public final class ValidPalindromeII {
      * @throws IllegalArgumentException if {@code s} is {@code null}.
      */
     public static boolean isAlmostPalindrome(String input) {
-        
+
         if (null == input) {
             throw new IllegalArgumentException("s is null");
         }
 
-        int left = 0'
+        int left = 0;
         int  right = s.length() - 1;
 
         while (left < right) {
