@@ -1,5 +1,7 @@
 package ai.betterme;
 
+import java.util.Arrays;
+
 /**
  * Day 24 - Coin Change (minimum number of coins). LeetCode 322.
  *
@@ -125,12 +127,23 @@ public final class CoinChange {
         if (amount < 0) {
             throw new IllegalArgumentException("amount must be >= 0, was " + amount);
         }
+
         for (int coin : coins) {
             if (coin <= 0) {
-                throw new IllegalArgumentException("coin denominations must be > 0, found " + coin);
+                throw new IllegalArgumentException("coin  must be > 0, found " + coin);
             }
         }
 
+        Arrays.sort(coins);
+        int count = 0;
        
+        for (int i = coins.length - 1; i >= 0; i--) {
+            if (amount >= coins[i]) {
+                count += amount / coins[i];
+                amount %= coins[i];
+            }
+        }
+        return count;
+
     }
 }
